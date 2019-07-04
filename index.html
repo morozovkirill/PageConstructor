@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+  html, body {height:100%;}
+
+  body {
+    background-color: #efefef !important;
+  }
+
+  .list-group-item {
+    width: 100%;
+  }
+
+  .catalogue {
+    background-color: #fff;
+    width: 400px;
+    height: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 100;
+    box-shadow: 4px 0 8px 0 rgba(0, 0, 0, 0.1);
+  }
+
+  .catalogue .list-group-item {
+    margin-bottom: 10px;
+  }
+
+  .hideSidebar {
+    left: -500px;
+  }
+
+  #catalogueSidebar {
+    transition: left .1s;
+  }
+
+  #Page {
+    margin-top: 80px;
+  }
+
+  .page {
+    width: 100%;
+    overflow-y: scroll;
+    padding: 0;
+  }
+
+  .page .list-group-item {
+    border: none;
+    padding: 0;
+  }
+
+  .page .list-group-item:hover .buttonContainer{
+    display: flex;
+  }
+
+  .list-group-item:hover {
+    cursor: grab;
+  }
+
+  .list-group-item:active {
+    cursor: grabbing;
+  }
+
+  .buttonContainer {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    display: none;
+    flex-direction: row;
+    z-index: 1;
+  }
+
+  img {
+    transition: filter .1s;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: auto;
+  }
+
+  .page img:hover {
+    filter: brightness(0.8);
+  }
+</style>
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <!-- <link href="https://borishof.client.bmw.kodixauto.ru/assets/css/dws.css" rel="stylesheet"> -->
+</head>
+<body>
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+<!-- Latest Sortable -->
+<script src="https://raw.githack.com/SortableJS/Sortable/master/Sortable.js"></script>
+
+<!-- Modal -->
+<div class="modal fade" id="shareUrl" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="exampleModalLabel">Ссылка на собранную страницу</h2>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="padding-bottom: 40px;">
+        <div>
+          <script>
+            var currentUrl = window.location.href;
+            var isParams = currentUrl.indexOf('?');
+            currentUrl = currentUrl.substring(0, isParams != -1 ? isParams : currentUrl.length);
+            var blocks = localStorage.getItem('blocks');
+            currentUrl += blocks ? '?blocks=' + localStorage.getItem('blocks') : '';
+            document.write('<input class="form-control" id="shareUrlInput" value="' + currentUrl + '">');
+          </script>
+        </div>
+        <div>
+          <button style="margin-top: 10px;" type="button" class="btn btn-light btn-sm" onclick="copyClipboard()">Скопировать в буфер</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="box-shadow: 0 0 4px rgba(0,0,0,0.2); background-color: white; position: fixed; z-index: 10; width: 100%; height: 80px; display: flex; flex-direction: row; align-items: center; justify-content: space-between;">
+  <div><h3 style="color: #333; margin-top: 0; margin-bottom: 0; margin-left: 20px;">Конструктор страниц</h3></div>
+  <div style="display: flex;">
+    <div><button style="margin-right: 10px;" type="button" class="btn btn-secondary" onclick="showSidebar();">Добавить блок</button></div>
+    <div><button style="margin-right: 10px;" type="button" class="btn btn-secondary" data-toggle="modal" data-target="#shareUrl">Поделиться ссылкой</button></div>
+    <!-- <div><button style="margin-right: 20px;" type="button" class="btn btn-secondary" onclick="">Посмотреть результат</button></div> -->
+  </div>
+</div>
+
+<div id="catalogueSidebar" class="catalogue hideSidebar">
+  <div style="padding: 20px; display: flex; flex-direction: row; justify-content: space-between;">
+    <div>
+      <h3>Блоки</h3>
+      <p>Перетаскивайте блоки на страницу и сортируйте их в нужном порядке</p>
+    </div>
+    <div><button type="button" class="btn btn-light" onclick="hideSidebar();">X</button></div>
+  </div>
+  <div id="Components" class="list-group" style="padding: 20px; padding-top: 0;">
+    <div data-id="1" name="Header" class="list-group-item">
+      Шапка
+    </div>
+    <div data-id="2" name="Advantages" class="list-group-item">
+      Преимущества
+    </div>
+    <div data-id="3" name="StageMain" class="list-group-item">
+      Стейдж
+    </div>
+  </div>
+</div>
+
+<div style="display: flex; flex-direction: row; height: 100%;">
+<div id="Page" class="list-group page" style="margin-bottom: 0;">
+    <!-- Page blocks adds here -->
+    <!-- <div id="Welcome" style="height: 100%; display: flex; justify-content: center; align-items: center;">
+      <div style="width:50%;">
+        <h1 style="padding-bottom: 10px;">Это конструктор страниц вашего сайта.</h1>
+        <h4 style="padding-bottom: 40px;">С помощью готовых блоков вы можете собрать любую из них: главная, страницы шоурума, новости и акции, контакты.</h4>
+        <button type="button" class="btn btn-primary btn-lg" onclick="showSidebar();">Посмотреть блоки</button>
+      </div>
+    </div> -->
+</div>
+</div>
+
+<script id="headerHTML" type="text/html">
+
+</script>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+<script>
+
+  var catalogueSidebar = document.getElementById('catalogueSidebar');
+  var pageContainer = document.getElementById('Page');
+
+  const Header = '<img src="img/header.png">';
+// const Header = document.getElementById('headerHTML').innerHTML;
+
+  const Advantages = '<img src="img/advantages.png">';
+  const StageMain = '<img src="img/stage_main.png">';
+
+  const WelcomeMess = '' +
+  '<div id="Welcome" style="height: 100%; display: flex; justify-content: center; align-items: center;">' +
+    '<div style="width:50%;">' +
+      '<h1 style="padding-bottom: 10px;">Это конструктор страниц вашего сайта.</h1>' +
+      '<h4 style="padding-bottom: 40px;">С помощью готовых блоков вы можете собрать любую из них: главная, страницы шоурума, новости и акции, контакты.</h4>' +
+      '<button type="button" class="btn btn-primary btn-lg" onclick="showSidebar();">Выбрать блоки</button>' +
+    '</div>' +
+  '</div>';
+
+  function showWelcomeMessage() {
+    pageContainer.innerHTML = WelcomeMess;
+  }
+
+  function createListItem(dataId, name, inner) {
+    var div = document.createElement('div');
+
+    div.classList.add('list-group-item');
+    div.setAttribute("data-id", dataId);
+    div.setAttribute("name", name);
+    div.innerHTML = inner;
+
+    var buttonContainer = document.createElement('div');
+    var container = div.appendChild(buttonContainer);
+    container.classList.add('buttonContainer');
+
+    createButtons(container);
+
+    return div;
+  }
+
+  function createButtons(container) {
+    var upButton = document.createElement('div');
+    upButton.innerHTML = '<button class="btn btn-light" style="margin-right: 5px;" onclick="upList(this.parentNode.parentNode.parentNode)">Вверх</button>';
+    container.appendChild(upButton);
+
+    var downButton = document.createElement('div');
+    downButton.innerHTML = '<button class="btn btn-light" style="margin-right: 5px;" onclick="downList(this.parentNode.parentNode.parentNode)">Вниз</button>';
+    container.appendChild(downButton);
+
+    var delButton = document.createElement('div');
+    delButton.innerHTML = '<button class="btn btn-light" style="margin-right: 5px;" onclick="removeFromList(this.parentNode.parentNode.parentNode)">Удалить</button>';
+    container.appendChild(delButton);
+  }
+
+  var listItems = {
+    header: createListItem,
+    advantages: createListItem,
+    stageMain: createListItem,
+  }
+
+  var order = localStorage.getItem('blocks');
+  var orderArr = order ? order.split('|') : [];
+
+  Sortable.create(Components, {
+    // handle: '.glyphicon-move',
+    group: {
+      name: 'blocks',
+      pull: 'clone',
+      put: false,
+    },
+    sort: false,
+    animation: 150
+  });
+
+  var sPage = Sortable.create(Page, {
+    // handle: '.glyphicon-move',
+    group: {
+      name: 'blocks',
+      pull: false,
+      put: true,
+    },
+    animation: 150,
+
+    store: {
+      // /**
+      // * Get the order of elements. Called once during initialization.
+      // * @param   {Sortable}  sortable
+      // * @returns {Array}
+      // */
+      get: function (sortable) {
+        var order = localStorage.getItem(sortable.options.group.name);
+        return order ? order.split('|') : [];
+      },
+
+      // /**
+      // * Save the order of elements. Called onEnd (when the item is dropped).
+      // * @param {Sortable}  sortable
+      // */
+      set: function (sortable) {
+        var order = sortable.toArray();
+        localStorage.setItem(sortable.options.group.name, order.join('|'));
+
+        // Update url
+        updateUrl();
+      }
+    },
+
+    onAdd: function (evt) {
+      var welcome = document.getElementById('Welcome')
+      if (welcome) {
+        welcome.remove();
+      }
+
+      evt.item.innerHTML = '';
+
+      switch(evt.item.attributes.name.value) {
+        case 'Header':
+          evt.item.innerHTML = Header;
+          break;
+        case 'StageMain':
+          evt.item.innerHTML = StageMain;
+          break;
+        case 'Advantages':
+          evt.item.innerHTML = Advantages;
+          break;
+      }
+
+      var buttonContainer = document.createElement('div');
+      var container = evt.item.appendChild(buttonContainer);
+      container.classList.add('buttonContainer');
+
+      createButtons(container);
+    }
+
+  });
+
+  // If we have something in local storage, show it
+  if (orderArr.length > 0) {
+    pageContainer.innerHTML = '';
+    for (var i = 0; i < orderArr.length; i++) {
+      switch(orderArr[i]) {
+        case "1":
+          pageContainer.appendChild(listItems.header("1", "Header", Header));
+          break;
+        case "2":
+          pageContainer.appendChild(listItems.advantages("2", "Advantages", Advantages));
+          break;
+        case "3":
+          pageContainer.appendChild(listItems.stageMain("3", "StageMain", StageMain));
+          break;
+      }
+    }
+    // and update url
+    updateUrl();
+  }
+  // Or, if not, show welcome message
+  else {
+    showWelcomeMessage();
+  }
+
+  function hideSidebar() {
+    catalogueSidebar.classList.add('hideSidebar');
+  }
+
+  function showSidebar() {
+    catalogueSidebar.classList.remove('hideSidebar');
+  }
+
+  function upList(node) {
+    if (node.previousElementSibling) {
+      node.parentNode.insertBefore(node, node.previousElementSibling);
+      sPage.options.store.set(sPage);
+    }
+  }
+
+  function downList(node) {
+    if (node.nextElementSibling) {
+      node.parentNode.insertBefore(node, node.nextElementSibling.nextElementSibling);
+      sPage.options.store.set(sPage);
+    }
+  }
+
+  function removeFromList(node) {
+    node.remove();
+    sPage.options.store.set(sPage);
+
+    var storage = localStorage.getItem('blocks');
+    if (!storage) {
+      showWelcomeMessage();
+    }
+  }
+
+  function copyClipboard() {
+    /* Get the text field */
+    var copyText = document.getElementById("shareUrlInput");
+    console.log(copyText);
+    /* Select the text field */
+    copyText.select();
+
+    /* Copy the text inside the text field */
+    document.execCommand("copy");
+  }
+
+  function updateUrl() {
+    var currentUrl = window.location.href;
+    var isParams = currentUrl.indexOf('?');
+    currentUrl = currentUrl.substring(0, isParams != -1 ? isParams : currentUrl.length);
+    var blocks = localStorage.getItem('blocks');
+    currentUrl += blocks ? '?blocks=' + localStorage.getItem('blocks') : '';
+    window.history.pushState('', 'Title', currentUrl);
+  }
+
+</script>
+
+</body>
+</html>
