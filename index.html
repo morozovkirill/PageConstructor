@@ -7,79 +7,108 @@
     background-color: #efefef !important;
   }
 
-  .list-group-item {
-    width: 100%;
+  /*SIDEBAR*/
+  #catalogueSidebar {
+      transition: left .1s;
+  }
+  .header-sidebar{
+      padding: 16px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+  }
+  .categories {
+    padding: 0 16px 16px;
+  }
+  .categories label {
+    margin: 8px 8px 0 0;
+    border-radius: 4px !important;
+    text-align: center !important;
+  }
+  .categories label:hover {
+    cursor: pointer;
   }
 
   .catalogue {
-    background-color: #fff;
-    width: 400px;
-    height: 100%;
-    position: fixed;
-    left: 0;
-    top: 0;
-    z-index: 100;
-    box-shadow: 4px 0 8px 0 rgba(0, 0, 0, 0.1);
+      background-color: #fff;
+      width: 400px;
+      height: 100%;
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 100;
+      box-shadow: 4px 0 8px 0 rgba(0, 0, 0, 0.1);
+      overflow-y: auto;
   }
-
   .catalogue .list-group-item {
-    margin-bottom: 10px;
+      margin-bottom: 10px;
   }
-
+  .catalogue .list-group-item:hover{
+      background: #f2f2f2;
+  }
+  .list-group-item {
+      width: 100%;
+  }
   .hideSidebar {
-    left: -500px;
+      left: -500px;
   }
 
-  #catalogueSidebar {
-    transition: left .1s;
+  /*PAGE*/
+  .welcome{
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
   }
-
+  .page-container{
+      display: flex;
+      flex-direction: row;
+      height: 100%;
+  }
   #Page {
-    margin-top: 80px;
+      margin-top: 80px;
   }
-
   .page {
-    width: 100%;
-    overflow-y: scroll;
-    padding: 0;
+      width: 100%;
+      overflow-y: scroll;
+      padding: 0;
   }
-
   .page .list-group-item {
-    border: none;
-    padding: 0;
+      border: none;
+      padding: 0;
   }
-
   .page .list-group-item:hover .buttonContainer{
-    display: flex;
+      display: flex;
   }
-
   .list-group-item:hover {
-    cursor: grab;
+      cursor: grab;
   }
-
   .list-group-item:active {
-    cursor: grabbing;
+      cursor: grabbing;
   }
-
   .buttonContainer {
-    position: absolute;
-    right: 10px;
-    top: 10px;
-    display: none;
-    flex-direction: row;
-    z-index: 1;
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      display: none;
+      flex-direction: row;
+      z-index: 1;
   }
-
   img {
-    transition: filter .1s;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: auto;
+      transition: filter .1s;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: auto;
   }
-
   .page img:hover {
-    filter: brightness(0.8);
+      filter: brightness(0.8);
+  }
+  .category-item{
+      padding: 12px 20px;
+  }
+  .category-item:hover{
+      cursor: pointer;
   }
 </style>
 <head>
@@ -127,8 +156,8 @@
 <div style="box-shadow: 0 0 4px rgba(0,0,0,0.2); background-color: white; position: fixed; z-index: 10; width: 100%; height: 80px; display: flex; flex-direction: row; align-items: center; justify-content: space-between;">
   <div><h3 style="color: #333; margin-top: 0; margin-bottom: 0; margin-left: 20px;">Конструктор страниц</h3></div>
   <div style="display: flex;">
-    <div><button style="margin-right: 10px;" type="button" class="btn btn-secondary" onclick="showSidebar();">Добавить блок</button></div>
-    <div><button style="margin-right: 10px;" type="button" class="btn btn-secondary" data-toggle="modal" data-target="#shareUrl">Поделиться ссылкой</button></div>
+    <div><button style="margin-right: 10px;" type="button" class="btn btn-outline-primary" onclick="showSidebar();">Добавить блок</button></div>
+    <div><button style="margin-right: 10px;" type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#shareUrl">Поделиться ссылкой</button></div>
     <!-- <div><button style="margin-right: 20px;" type="button" class="btn btn-secondary" onclick="">Посмотреть результат</button></div> -->
   </div>
 </div>
@@ -139,33 +168,57 @@
       <h3>Блоки</h3>
       <p>Перетаскивайте блоки на страницу и сортируйте их в нужном порядке</p>
     </div>
-    <div><button type="button" class="btn btn-light" onclick="hideSidebar();">X</button></div>
+    <div><button type="button" class="btn btn-light" onclick="hideSidebar();"><span aria-hidden="true">&times;</span></button></div>
   </div>
-  <div id="Components" class="list-group" style="padding: 20px; padding-top: 0;">
-    <div data-id="1" name="Header" class="list-group-item">
-      Шапка
-    </div>
-    <div data-id="2" name="Advantages" class="list-group-item">
-      Преимущества
-    </div>
-    <div data-id="3" name="StageMain" class="list-group-item">
-      Стейдж
-    </div>
+  <hr>
+  <div class="container">
+      <div id="Categories" class="row categories btn-group btn-group-toggle" data-toggle="buttons">
+        <label data-id="1" class="btn btn-outline-secondary shadow-none" style="text-align: left;">
+          <input type="radio" id="cat1">Технические блоки
+        </label>
+        <label data-id="2" class="btn btn-outline-secondary shadow-none" style="text-align: left;">
+          <input type="radio" id="cat2">Преимущества
+        </label>
+        <label data-id="3" class="btn btn-outline-secondary shadow-none" style="text-align: left;">
+          <input type="radio" id="cat3">Текстографические блоки
+        </label>
+        <label data-id="4" class="btn btn-outline-secondary shadow-none" style="text-align: left;">
+          <input type="radio" id="cat4">Карточки
+        </label>
+        <label data-id="5" class="btn btn-outline-secondary shadow-none" style="text-align: left;">
+          <input type="radio" id="cat5">Контакты
+        </label>
+        <label data-id="6" class="btn btn-outline-secondary shadow-none" style="text-align: left;">
+          <input type="radio" id="cat6">Обложки
+        </label>
+        <label data-id="7" class="btn btn-outline-secondary shadow-none" style="text-align: left;">
+          <input type="radio" id="cat7">Формы
+        </label>
+        <label data-id="8" class="btn btn-outline-secondary shadow-none" style="text-align: left;">
+          <input type="radio" id="cat8">Галерея
+        </label>
+        <label data-id="9" class="btn btn-outline-secondary shadow-none" style="text-align: left;">
+          <input type="radio" id="cat9">Кнопки
+        </label>
+        <label data-id="10" class="btn btn-outline-secondary shadow-none" style="text-align: left;">
+          <input type="radio" id="cat10">Модель
+        </label>
+      </div>
+  </div>
+  <hr>
+  <div class="container mb-5" >
+      <div id="Components" class="list-group">
+      </div>
   </div>
 </div>
 
 <div style="display: flex; flex-direction: row; height: 100%;">
-<div id="Page" class="list-group page" style="margin-bottom: 0;">
-    <!-- Page blocks adds here -->
-    <!-- <div id="Welcome" style="height: 100%; display: flex; justify-content: center; align-items: center;">
-      <div style="width:50%;">
-        <h1 style="padding-bottom: 10px;">Это конструктор страниц вашего сайта.</h1>
-        <h4 style="padding-bottom: 40px;">С помощью готовых блоков вы можете собрать любую из них: главная, страницы шоурума, новости и акции, контакты.</h4>
-        <button type="button" class="btn btn-primary btn-lg" onclick="showSidebar();">Посмотреть блоки</button>
-      </div>
-    </div> -->
+<div id="Page" class="list-group page mb-0" style="margin-bottom: 0;">
+
 </div>
 </div>
+
+<div id="blockPreview" style="position: fixed; top: 20px; left: 420px; width: 400px; z-index: 10; background: transparent; "></div>
 
 <script id="headerHTML" type="text/html">
 
@@ -182,11 +235,177 @@
   var catalogueSidebar = document.getElementById('catalogueSidebar');
   var pageContainer = document.getElementById('Page');
 
-  const Header = '<img src="img/header.png">';
-// const Header = document.getElementById('headerHTML').innerHTML;
+  let categories = document.getElementById('Categories');
+  let components = document.getElementById('Components');
+  let preview = document.getElementById('blockPreview');
 
-  const Advantages = '<img src="img/advantages.png">';
-  const StageMain = '<img src="img/stage_main.png">';
+  categories.addEventListener('click', {handleEvent: showComponents});
+
+  function showComponents(event) {
+    let dataId = event.target.attributes[0].value;
+    let html = '';
+    switch (dataId) {
+      case '1':
+       html = '' +
+        '<div data-id="1" data-url="img/1024px_skoda_breadcrumbs.png" data-title="Хлебные крошки" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">Хлебные крошки</div>' +
+        '<div data-id="22" data-url="img/1440px_skoda_footer.png" data-title="Подвал" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">Подвал</div>' +
+        '<div data-id="32" data-url="img/1440px_skoda_header_01.png" data-title="Меню" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">Меню</div>' +
+        '<div data-id="33" data-url="img/1440px_skoda_header_Mega_menu-cars.png" data-title="Модельный ряд в меню" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">Модельный ряд в меню</div>' +
+        '<div data-id="34" data-url="img/1440px_skoda_header_Mega_menu-customer-text-buttons.png" data-title="CTA в меню" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">CTA в меню</div>' +
+        '<div data-id="35" data-url="img/1440px_skoda_header_Mega_menu-customer-text.png" data-title="Меню с категориями" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">Меню с категориями</div>';
+      break;
+      case '2':
+       html = '' +
+       '<div data-id="2" data-url="img/1440px_skoda_advantages-1.png" data-title="Вкладки+Слайдер 1" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">Вкладки+Слайдер 1</div>' +
+       '<div data-id="3" data-url="img/1440px_skoda_advantages-2.png" data-title="Вкладки+Слайдер 2" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">Вкладки+Слайдер 2</div>' +
+       '<div data-id="4" data-url="img/1440px_skoda_advantages-3.png" data-title="Вкладки+Слайдер 3" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">Вкладки+Слайдер 3</div>' +
+       '<div data-id="6" data-url="img/1440px_skoda_advantages_list-1.png" data-title="Список с преимуществами (1 колонка)" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">Список с преимуществами (1 колонка)</div>' +
+       '<div data-id="7" data-url="img/1440px_skoda_advantages_list-2.png" data-title="Список с преимуществами (2 колонки)" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">Список с преимуществами (2 колонки)</div>' +
+       '<div data-id="8" data-url="img/1440px_skoda_advantages_list-3.png" data-title="Список с преимуществами (простой)" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">Список с преимуществами (простой)</div>' +
+       '<div data-id="9" data-url="img/1440px_skoda_advantages_list-4.png" data-title="Список с цифрами (светлый)" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">Список с цифрами (светлый)</div>' +
+       '<div data-id="10" data-url="img/1440px_skoda_advantages_list-5.png" data-title="Список с цифрами (темный)" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">Список с цифрами (темный)</div>' +
+       '<div data-id="11" data-url="img/1440px_skoda_advantages_list-6.png" data-title="Список с цифрами и иконками" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">Список с цифрами и иконками</div>';
+      break;
+      case '3':
+       html = '' +
+       '<div data-id="5" data-url="img/1440px_skoda_advantages-4.png" data-title="Вкладки с ТГБ" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">Вкладки с ТГБ</div>' +
+       '<div data-id="51" data-url="img/1440px_skoda_tgb-1.png" data-title="ТГБ горизонтальный 1" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">ТГБ горизонтальный 1</div>' +
+       '<div data-id="52" data-url="img/1440px_skoda_tgb-2.png" data-title="ТГБ горизонтальный 2" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">ТГБ горизонтальный 2</div>' +
+       '<div data-id="53" data-url="img/1440px_skoda_tgb-3.png" data-title="ТГБ горизонтальный 3" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">ТГБ горизонтальный 3</div>' +
+       '<div data-id="54" data-url="img/1440px_skoda_tgb-4.png" data-title="ТГБ вертикальный 1" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">ТГБ вертикальный 1</div>' +
+       '<div data-id="55" data-url="img/1440px_skoda_tgb-5.png" data-title="ТГБ вертикальный 2" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">ТГБ вертикальный 2</div>' +
+       '<div data-id="56" data-url="img/1440px_skoda_tgb-6.png" data-title="ТГБ вертикальный 3" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">ТГБ вертикальный 3</div>' +
+       '<div data-id="57" data-url="img/1440px_skoda_tgb-7.png" data-title="ТГБ вертикальный 4" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">ТГБ вертикальный 4</div>' +
+       '<div data-id="58" data-url="img/1440px_skoda_tgb-8.png" data-title="ТГБ вертикальный 5" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">ТГБ вертикальный 5</div>' +
+       '<div data-id="59" data-url="img/1440px_skoda_tgb_chess-1.png" data-title="ТГБ горизонтальный 4" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">ТГБ горизонтальный 4</div>' +
+       '<div data-id="60" data-url="img/1440px_skoda_tgb_chess-2.png" data-title="ТГБ горизонтальный 5" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">ТГБ горизонтальный 5</div>';
+      break;
+      case '4':
+       html = '' +
+       '<div data-id="12" data-url="img/1440px_skoda_article.png" data-title="1 вертикальная карточка (статья)" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">1 вертикальная карточка (статья)</div>' +
+       '<div data-id="13" data-url="img/1440px_skoda_cards vertical-1.png" data-title="2 вертикальные карточки" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">2 вертикальные карточки</div>' +
+       '<div data-id="14" data-url="img/1440px_skoda_cards vertical-2.png" data-title="3+ вертикальные карточки (слайдер)" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">3+ вертикальные карточки (слайдер)</div>' +
+       '<div data-id="15" data-url="img/1440px_skoda_cars Main page-1.png" data-title="Карточки моделей" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">Карточки моделей</div>' +
+       '<div data-id="16" data-url="img/1440px_skoda_cars Main page-2.png" data-title="Карточки моделей с выгодами" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">Карточки моделей с выгодами</div>' +
+       '<div data-id="44" data-url="img/1440px_skoda_news-1.png" data-title="Список новостей на сером" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">Список новостей на сером</div>' +
+       '<div data-id="45" data-url="img/1440px_skoda_news-2.png" data-title="Список новостей на белом" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">Список новостей на белом</div>';
+      break;
+      case '5':
+       html = '' +
+       '<div data-id="17" data-url="img/1440px_skoda_contacts-1.png" data-title="Контакты подробно" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">Контакты подробно</div>' +
+       '<div data-id="18" data-url="img/1440px_skoda_contacts-2.png" data-title="Контакты кратко" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">Контакты кратко</div>' +
+       '<div data-id="19" data-url="img/1440px_skoda_contacts-3.png" data-title="Карта" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">Карта</div>' +
+       '<div data-id="50" data-url="img/1440px_skoda_staff.png" data-title="Контакты сотрудников" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">Контакты сотрудников</div>';
+      break;
+      case '6':
+       html = '' +
+       '<div data-id="20" data-url="img/1440px_skoda_divider_v.1_dark copy 2.png" data-title="Перетяжка 1" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">Перетяжка 1</div>' +
+       '<div data-id="21" data-url="img/1440px_skoda_divider_v.1_dark.png" data-title="Перетяжка 2" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">Перетяжка 2</div>' +
+       '<div data-id="43" data-url="img/1440px_skoda_main_stage.png" data-title="Стейдж" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">Стейдж</div>';
+      break;
+      case '7':
+       html = '' +
+       '<div data-id="23" data-url="img/1440px_skoda_form.png" data-title="Форма записи на сервис" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">Форма записи на сервис</div>' +
+       '<div data-id="24" data-url="img/1440px_skoda_form_feedback.png" data-title="Форма обратной связи" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">Форма обратной связи</div>' +
+       '<div data-id="25" data-url="img/1440px_skoda_form_request.png" data-title="Форма обратного звонка" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">Форма обратного звонка</div>' +
+       '<div data-id="26" data-url="img/1440px_skoda_form_subscribe 002.png" data-title="Форма уточнения доп. информации" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">Форма уточнения доп. информации</div>' +
+       '<div data-id="27" data-url="img/1440px_skoda_form_subscribe.png" data-title="Форма подписки на рассылку" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">Форма подписки на рассылку</div>' +
+       '<div data-id="28" data-url="img/1440px_skoda_form_testdrive.png" data-title="Форма записи на тест-драйв" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">Форма записи на тест-драйв</div>';
+      break;
+      case '8':
+       html = '' +
+       '<div data-id="29" data-url="img/1440px_skoda_galery_tile-1.png" data-title="Галерея 2x2" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">Галерея 2x2</div>' +
+       '<div data-id="30" data-url="img/1440px_skoda_galery_tile-2.png" data-title="Галерея 2x3" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">Галерея 2x3</div>' +
+       '<div data-id="31" data-url="img/1440px_skoda_galery_tile-3.png" data-title="Галерея 2x4" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">Галерея 2x4</div>' +
+       '<div data-id="41" data-url="img/1440px_skoda_image-1.png" data-title="Картинка или баннер 1" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">Картинка или баннер 1</div>' +
+       '<div data-id="42" data-url="img/1440px_skoda_image-2.png" data-title="Картинка или баннер 2" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">Картинка или баннер 2</div>' +
+       '<div data-id="61" data-url="img/1440px_skoda_video-1.png" data-title="Видео 1" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">Видео 1</div>' +
+       '<div data-id="62" data-url="img/1440px_skoda_video-2.png" data-title="Видео 2" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">Видео 2</div>';
+      break;
+      case '9':
+       html = '' +
+       '<div data-id="36" data-url="img/1440px_skoda_iconsgroup-1.png" data-title="CTA кнопки - 2" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">CTA кнопки - 2</div>' +
+       '<div data-id="37" data-url="img/1440px_skoda_iconsgroup-2.png" data-title="CTA кнопки - 3" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">CTA кнопки - 3</div>' +
+       '<div data-id="38" data-url="img/1440px_skoda_iconsgroup-3.png" data-title="CTA кнопки - 4" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">CTA кнопки - 4</div>' +
+       '<div data-id="39" data-url="img/1440px_skoda_iconsgroup-4.png" data-title="CTA кнопки - 6" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">CTA кнопки - 6</div>' +
+       '<div data-id="40" data-url="img/1440px_skoda_iconsgroup-5.png" data-title="CTA кнопки - 4 с заголовком" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">CTA кнопки - 4 с заголовком</div>';
+      break;
+      case '10':
+       html = '' +
+       '<div data-id="46" data-url="img/1440px_skoda_showroom_complectation_octavia.png" data-title="Блок комплектации" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">Блок комплектации</div>' +
+       '<div data-id="47" data-url="img/1440px_skoda_showroom_stage.png" data-title="Стейдж шоурума" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">Стейдж шоурума</div>' +
+       '<div data-id="48" data-url="img/1440px_skoda_showroom_tech_octavia_default.png" data-title="Технические характеристики (свернуты)" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">Технические характеристики (свернуты)</div>' +
+       '<div data-id="49" data-url="img/1440px_skoda_showroom_tech_octavia_open.png" data-title="Технические характеристики (открыты)" class="list-group-item" onmouseover="blockPreview(this)" onmouseout="blockPreviewRemove(this)">Технические характеристики (открыты)</div>';
+      break;
+    }
+    Components.innerHTML = html;
+  }
+
+  var imgUrl = [
+    '',
+    'img/1024px_skoda_breadcrumbs.png',
+    'img/1440px_skoda_advantages-1.png',
+    'img/1440px_skoda_advantages-2.png',
+    'img/1440px_skoda_advantages-3.png',
+    'img/1440px_skoda_advantages-4.png',
+    'img/1440px_skoda_advantages_list-1.png',
+    'img/1440px_skoda_advantages_list-2.png',
+    'img/1440px_skoda_advantages_list-3.png',
+    'img/1440px_skoda_advantages_list-4.png',
+    'img/1440px_skoda_advantages_list-5.png',
+    'img/1440px_skoda_advantages_list-6.png',
+    'img/1440px_skoda_article.png',
+    'img/1440px_skoda_cards vertical-1.png',
+    'img/1440px_skoda_cards vertical-2.png',
+    'img/1440px_skoda_cars Main page-1.png',
+    'img/1440px_skoda_cars Main page-2.png',
+    'img/1440px_skoda_contacts-1.png',
+    'img/1440px_skoda_contacts-2.png',
+    'img/1440px_skoda_contacts-3.png',
+    'img/1440px_skoda_divider_v.1_dark copy 2.png',
+    'img/1440px_skoda_divider_v.1_dark.png',
+    'img/1440px_skoda_footer.png',
+    'img/1440px_skoda_form.png',
+    'img/1440px_skoda_form_feedback.png',
+    'img/1440px_skoda_form_request.png',
+    'img/1440px_skoda_form_subscribe 002.png',
+    'img/1440px_skoda_form_subscribe.png',
+    'img/1440px_skoda_form_testdrive.png',
+    'img/1440px_skoda_galery_tile-1.png',
+    'img/1440px_skoda_galery_tile-2.png',
+    'img/1440px_skoda_galery_tile-3.png',
+    'img/1440px_skoda_header_01.png',
+    'img/1440px_skoda_header_Mega_menu-cars.png',
+    'img/1440px_skoda_header_Mega_menu-customer-text-buttons.png',
+    'img/1440px_skoda_header_Mega_menu-customer-text.png',
+    'img/1440px_skoda_iconsgroup-1.png',
+    'img/1440px_skoda_iconsgroup-2.png',
+    'img/1440px_skoda_iconsgroup-3.png',
+    'img/1440px_skoda_iconsgroup-4.png',
+    'img/1440px_skoda_iconsgroup-5.png',
+    'img/1440px_skoda_image-1.png',
+    'img/1440px_skoda_image-2.png',
+    'img/1440px_skoda_main_stage.png',
+    'img/1440px_skoda_news-1.png',
+    'img/1440px_skoda_news-2.png',
+    'img/1440px_skoda_showroom_complectation_octavia.png',
+    'img/1440px_skoda_showroom_stage.png',
+    'img/1440px_skoda_showroom_tech_octavia_default.png',
+    'img/1440px_skoda_showroom_tech_octavia_open.png',
+    'img/1440px_skoda_staff.png',
+    'img/1440px_skoda_tgb-1.png',
+    'img/1440px_skoda_tgb-2.png',
+    'img/1440px_skoda_tgb-3.png',
+    'img/1440px_skoda_tgb-4.png',
+    'img/1440px_skoda_tgb-5.png',
+    'img/1440px_skoda_tgb-6.png',
+    'img/1440px_skoda_tgb-7.png',
+    'img/1440px_skoda_tgb-8.png',
+    'img/1440px_skoda_tgb_chess-1.png',
+    'img/1440px_skoda_tgb_chess-2.png',
+    'img/1440px_skoda_video-1.png',
+    'img/1440px_skoda_video-2.png'
+  ];
 
   const WelcomeMess = '' +
   '<div id="Welcome" style="height: 100%; display: flex; justify-content: center; align-items: center;">' +
@@ -201,23 +420,6 @@
     pageContainer.innerHTML = WelcomeMess;
   }
 
-  function createListItem(dataId, name, inner) {
-    var div = document.createElement('div');
-
-    div.classList.add('list-group-item');
-    div.setAttribute("data-id", dataId);
-    div.setAttribute("name", name);
-    div.innerHTML = inner;
-
-    var buttonContainer = document.createElement('div');
-    var container = div.appendChild(buttonContainer);
-    container.classList.add('buttonContainer');
-
-    createButtons(container);
-
-    return div;
-  }
-
   function createButtons(container) {
     var upButton = document.createElement('div');
     upButton.innerHTML = '<button class="btn btn-light" style="margin-right: 5px;" onclick="upList(this.parentNode.parentNode.parentNode)">Вверх</button>';
@@ -230,12 +432,6 @@
     var delButton = document.createElement('div');
     delButton.innerHTML = '<button class="btn btn-light" style="margin-right: 5px;" onclick="removeFromList(this.parentNode.parentNode.parentNode)">Удалить</button>';
     container.appendChild(delButton);
-  }
-
-  var listItems = {
-    header: createListItem,
-    advantages: createListItem,
-    stageMain: createListItem,
   }
 
   var order = localStorage.getItem('blocks');
@@ -293,17 +489,7 @@
 
       evt.item.innerHTML = '';
 
-      switch(evt.item.attributes.name.value) {
-        case 'Header':
-          evt.item.innerHTML = Header;
-          break;
-        case 'StageMain':
-          evt.item.innerHTML = StageMain;
-          break;
-        case 'Advantages':
-          evt.item.innerHTML = Advantages;
-          break;
-      }
+      evt.item.innerHTML = '<img src="' + evt.item.dataset.url + '">';
 
       var buttonContainer = document.createElement('div');
       var container = evt.item.appendChild(buttonContainer);
@@ -318,17 +504,20 @@
   if (orderArr.length > 0) {
     pageContainer.innerHTML = '';
     for (var i = 0; i < orderArr.length; i++) {
-      switch(orderArr[i]) {
-        case "1":
-          pageContainer.appendChild(listItems.header("1", "Header", Header));
-          break;
-        case "2":
-          pageContainer.appendChild(listItems.advantages("2", "Advantages", Advantages));
-          break;
-        case "3":
-          pageContainer.appendChild(listItems.stageMain("3", "StageMain", StageMain));
-          break;
-      }
+
+        let div = document.createElement('div');
+        div.classList.add('list-group-item');
+        div.setAttribute("data-id", orderArr[i]);
+        // div.setAttribute("name", name);
+
+        div.innerHTML = '<img src="' + imgUrl[orderArr[i]] + '">';
+        pageContainer.appendChild(div);
+
+        var buttonContainer = document.createElement('div');
+        var container = div.appendChild(buttonContainer);
+        container.classList.add('buttonContainer');
+
+        createButtons(container);
     }
     // and update url
     updateUrl();
@@ -388,6 +577,17 @@
     var blocks = localStorage.getItem('blocks');
     currentUrl += blocks ? '?blocks=' + localStorage.getItem('blocks') : '';
     window.history.pushState('', 'Title', currentUrl);
+  }
+
+  function blockPreview(data){
+    let parentId = data.parentElement.getAttribute("id")
+    if(parentId === 'Components'){
+        preview.innerHTML = '<img src="' + data.getAttribute("data-url") +  '" style="box-shadow: 0px 0px 39px -8px rgba(0,0,0,0.94);">';
+    }
+  }
+
+  function blockPreviewRemove() {
+    preview.innerHTML = '';
   }
 
 </script>
